@@ -1,12 +1,8 @@
 import axios from 'axios';
 
 function create(baseURL, options) {
-  Object.assign({baseURL}, options)
-	const instance = axios.create({
-		baseURL: 'https://some-domain.com/api/',
-		...options,
-	});
+	const instance = axios.create(Object.assign({ baseURL }, options));
 	return instance;
 }
 
-export const posts = create()
+export const posts = create(`${import.meta.env.VITE_APP_API_URL}/posts/`);

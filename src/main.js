@@ -8,3 +8,6 @@ const app = createApp(App);
 app.use(router);
 app.mount('#app');
 import 'bootstrap/dist/js/bootstrap.js';
+
+console.log('MODE', import.meta.env.MODE);
+console.log('MODE', import.meta.env.VITE_APP_API_URL);
