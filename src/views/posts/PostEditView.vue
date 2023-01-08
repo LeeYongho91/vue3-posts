@@ -18,6 +18,7 @@
 				<button class="btn btn-primary">수정</button>
 			</template>
 		</PostForm>
+		<AppAlert :items="alerts" />
 	</div>
 </template>
 
@@ -42,6 +43,7 @@ const fetchPost = async () => {
 		setPost(data);
 	} catch (error) {
 		console.error(error);
+		vAlert(error.message, 'error');
 	}
 };
 
@@ -54,13 +56,22 @@ fetchPost();
 const edit = async () => {
 	try {
 		await updatePost(id, { ...form.value });
-		router.push({ name: 'PostDetail', params: { id } });
+		// router.push({ name: 'PostDetail', params: { id } });
+		vAlert('수정이 완료되었습니다.', 'success');
 	} catch (error) {
-		console.error(error);
+		vAlert(error.message, 'error');
 	}
 };
 
 const goDetailPage = () => router.push({ name: 'PostDetail', params: { id } });
+
+const alerts = ref([]);
+const vAlert = (message, type = 'error') => {
+	alerts.value.push({ message, type });
+	setTimeout(() => {
+		alerts.value.shift();
+	}, 2000);
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -4,14 +4,22 @@
 	<AppGrid :items="items" v-slot="{ item }" colClass="col-6">
 		<AppCard>{{ item }}</AppCard>
 	</AppGrid>
+	<button class="btn btn-primary" @click="person.say">say Hello</button>
 </template>
+
+<!-- <script>
+export default {
+	created() {
+		console.log(this.$person.name);
+	},
+};
+</script> -->
 
 <script setup>
 import { ref } from 'vue';
-import AppCard from '@/components/AppCard.vue';
-import AppGrid from '@/components/AppGrid.vue';
-
 const items = ref(['사과', '딸기', '포도', '바나나']);
+// const person = inject('person');
+// console.log(person);
 </script>
 
 <style lang="scss" scoped></style>

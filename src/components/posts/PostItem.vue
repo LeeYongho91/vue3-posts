@@ -8,12 +8,17 @@
 			</p>
 			<p class="text-muted">{{ createdAt }}</p>
 		</div>
-		<template v-slot:footer>푸터</template>
+		<template #footer>
+			<div class="d-flex flex-row-reverse">
+				<button class="btn p-0" @click.stop="$emit('modal')">
+					<i class="bi bi-emoji-sunglasses"></i>
+				</button>
+			</div>
+		</template>
 	</AppCard>
 </template>
 
 <script setup>
-import AppCard from '@/components/AppCard.vue';
 defineProps({
 	title: {
 		type: String,
@@ -26,6 +31,7 @@ defineProps({
 		type: [String, Number, Date],
 	},
 });
+defineEmits(['modal']);
 </script>
 
 <style lang="scss" scoped></style>

@@ -37,8 +37,8 @@
       "id": 14
     },
     {
-      "title": "11111111",
-      "content": "111111",
+      "title": "11111111dfda",
+      "content": "111111dfda",
       "createdAt": 1673080804867,
       "id": 15
     },
@@ -47,11 +47,6 @@
       "content": "adsf",
       "createdAt": 1673080857887,
       "id": 16
-    },
-    {
-      "title": "123",
-      "content": "123",
-      "id": 17
     }
   ]
 }
