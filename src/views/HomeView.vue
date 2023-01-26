@@ -4,7 +4,7 @@
 	<AppGrid :items="items" v-slot="{ item }" colClass="col-6">
 		<AppCard>{{ item }}</AppCard>
 	</AppGrid>
-	<button class="btn btn-primary" @click="person.say">say Hello</button>
+	<button class="btn btn-primary">say Hello</button>
 </template>
 
 <!-- <script>
