@@ -1,11 +1,14 @@
 <template>
-	<div>
+	<AppLoading v-if="loading" />
+	<AppError v-else-if="error" :message="error.message" />
+	<div v-else>
 		<h2>{{ post.title }}</h2>
 		<p>{{ post.content }}</p>
 		<p class="text-muted">
 			{{ $dayjs(post.createdAt).format('YYYY. MM. DD HH:mm:ss') }}
 		</p>
 		<hr class="my-4" />
+		<AppError v-if="removeError" :message="removeError.message" />
 		<div class="row g-2">
 			<div class="col-auto">
 				<button class="btn btn-outline-dark">이전글</button>
@@ -23,7 +26,21 @@
 				</button>
 			</div>
 			<div class="col-auto">
-				<button class="btn btn-outline-danger" @click="remove">삭제</button>
+				<button
+					class="btn btn-outline-danger"
+					@click="remove"
+					:disabled="removeLoading"
+				>
+					<template v-if="removeLoading">
+						<span
+							class="spinner-grow spinner-grow-sm"
+							role="status"
+							aria-hidden="true"
+						></span>
+						<span class="visually-hidden">Loading...</span>
+					</template>
+					<template v-else> 삭제</template>
+				</button>
 			</div>
 		</div>
 	</div>
@@ -31,43 +48,42 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { getPostById, deletePost } from '@/api/posts';
-import { ref } from 'vue';
+import { useAxios } from '@/hooks/useAxios';
+import { useAlert } from '@/composables/alert.js';
 
 const props = defineProps({
 	id: Number,
 });
 
 const router = useRouter();
-// const route = useRoute();
-// const id = route.params.id;
-const post = ref({});
+const { vAlert, vSuccess } = useAlert();
 
-const fetchPost = async () => {
-	try {
-		const { data } = await getPostById(props.id);
-		setPost(data);
-	} catch (error) {
-		console.error(error.response.data);
-	}
-};
+const { data: post, error, loading } = useAxios(`/posts/${props.id}`);
 
-const setPost = ({ title, content, createdAt }) => {
-	post.value.title = title;
-	post.value.content = content;
-	post.value.createdAt = createdAt;
-};
+const {
+	error: removeError,
+	loading: removeLoading,
+	execute,
+} = useAxios(
+	`/posts/${props.id}`,
+	{
+		method: `delete`,
+	},
+	{
+		immediate: false,
+		onSuccess: () => {
+			vSuccess('삭제가 완료되었습니다.');
+			router.push({ name: 'PostList' });
+		},
+		onError: err => {
+			vAlert(err.message, 'error');
+		},
+	},
+);
 
-fetchPost();
-
-const remove = async () => {
-	try {
-		if (confirm('삭제 하시겠습니까?') === false) return;
-		await deletePost(props.id);
-		router.push({ name: 'PostList' });
-	} catch (error) {
-		console.error(error);
-	}
+const remove = () => {
+	if (confirm('삭제 하시겠습니까?') === false) return;
+	execute();
 };
 
 const goListPage = () => router.push({ name: 'PostList' });
